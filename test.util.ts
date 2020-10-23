@@ -95,3 +95,10 @@ export function isMariaDB(connection: Connection): boolean {
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+export function buildLargeString(len: number) {
+  let str = "";
+  for (let i = 0; i < len; i++) {
+    str += (i % 10);
+  }
+  return str;
+}

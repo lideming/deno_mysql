@@ -4,6 +4,7 @@ import {
   ResponseTimeoutError,
 } from "./src/constant/errors.ts";
 import {
+  buildLargeString,
   createTestDB,
   delay,
   isMariaDB,
@@ -270,18 +271,24 @@ testWithClient(async function testReadTimeout(client) {
 });
 
 testWithClient(async function testLargeQueryAndResponse(client) {
-  function buildLargeString(len: number) {
-    let str = "";
-    for (let i = 0; i < len; i++) {
-      str += (i % 10);
-    }
-    return str;
-  }
   const largeString = buildLargeString(512 * 1024);
   assertEquals(
     await client.query(`select "${largeString}" as str`),
     [{ str: largeString }],
   );
+});
+
+testWithClient(async function testHeavyQueries(client) {
+  const promises: Promise<void>[] = [];
+  for (let i = 0; i < 100; i++) {
+    const str = buildLargeString(10240 + Math.floor(Math.random() * 256000));
+    promises.push(
+      client.query(`select "${str}" as str`).then(async (r) => {
+        assertEquals(r, [{ str }]);
+      }),
+    );
+  }
+  await Promise.all(promises);
 });
 
 registerTests();
