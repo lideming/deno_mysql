@@ -43,7 +43,7 @@ testWithClient(async function testInsert(client) {
 testWithClient(async function testUpdate(client) {
   let result = await client.execute(
     `update users set ?? = ?, ?? = ? WHERE id = ?`,
-    ["name", "MYR🦕", "created_at", new Date(), 1],
+    ["name", '\\"MYR🦕"\\', "created_at", new Date(), 1],
   );
   assertEquals(result, { affectedRows: 1, lastInsertId: 0 });
 });
@@ -53,7 +53,7 @@ testWithClient(async function testQuery(client) {
     "select ??,`is_top`,`name` from ?? where id = ?",
     ["id", "users", 1],
   );
-  assertEquals(result, [{ id: 1, name: "MYR🦕", is_top: false }]);
+  assertEquals(result, [{ id: 1, name: '\\"MYR🦕"\\', is_top: false }]);
 });
 
 testWithClient(async function testQueryErrorOccurred(client) {
@@ -78,7 +78,7 @@ testWithClient(async function testQueryList(client) {
   const sql = "select ??,?? from ??";
   let result = await client.query(sql, ["id", "name", "users"]);
   assertEquals(result, [
-    { id: 1, name: "MYR🦕" },
+    { id: 1, name: '\\"MYR🦕"\\' },
     { id: 2, name: "MySQL" },
   ]);
 });
