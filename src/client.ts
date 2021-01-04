@@ -28,6 +28,8 @@ export interface ClientConfig {
   idleTimeout?: number;
   /** charset */
   charset?: string;
+  /** Connection read buffer size in bytes (default: 64 KB) */
+  readBuffer?: number;
 }
 
 /** Transaction processor */
@@ -66,6 +68,7 @@ export class Client {
       poolSize: 1,
       timeout: 30 * 1000,
       idleTimeout: 4 * 3600 * 1000,
+      readBuffer: 64 * 1024,
       ...config,
     };
     Object.freeze(this.config);
