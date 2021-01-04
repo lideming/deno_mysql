@@ -18,8 +18,8 @@ import {
   MYSQL_TYPE_TIMESTAMP,
   MYSQL_TYPE_TIMESTAMP2,
   MYSQL_TYPE_TINY,
-  MYSQL_TYPE_VARCHAR,
   MYSQL_TYPE_VAR_STRING,
+  MYSQL_TYPE_VARCHAR,
 } from "../../constant/mysql_types.ts";
 
 /** @ignore */
@@ -84,9 +84,6 @@ export function parseRow(reader: BufferReader, fields: FieldInfo[]): any {
 /** @ignore */
 function convertType(field: FieldInfo, val: string): any {
   const { fieldType, fieldLen } = field;
-  if (fieldType === MYSQL_TYPE_TINY && fieldLen === 1) {
-    return !!parseInt(val);
-  }
   switch (fieldType) {
     case MYSQL_TYPE_DECIMAL:
     case MYSQL_TYPE_DOUBLE:

@@ -5,9 +5,7 @@
 ![GitHub release](https://img.shields.io/github/release/manyuanrong/deno_mysql.svg)
 ![(Deno)](https://img.shields.io/badge/deno-1.0.0-green.svg)
 
-MySQL and MariaDB (5.5 and 10.2+) database driver for Deno.
-
-MariaDB 10.0 and 10.1 are not supported at the moment
+MySQL and MariaDB (5.5 and 10.0+) database driver for Deno.
 
 On this basis, there is also an ORM library: [Deno Simple Orm](https://github.com/manyuanrong/dso)
 
@@ -16,7 +14,7 @@ On this basis, there is also an ORM library: [Deno Simple Orm](https://github.co
 ## TODO
 
 - [x] Connecting to database
-  - [x] Retring
+  - [x] Retrying
   - [x] Timeout
 - [x] Basic login authentication
 - [x] Simple queries (no arguments)
@@ -26,8 +24,6 @@ On this basis, there is also an ORM library: [Deno Simple Orm](https://github.co
 - [x] Connection pool
 - [x] Transaction
 - [x] Test case
-- [ ] Support MariaDB 10.0
-- [ ] Support MariaDB 10.1
 - [ ] Support caching_sha2_password auth plugin (mysql8 default)
 
 ## API
