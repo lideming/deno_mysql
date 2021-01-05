@@ -1,4 +1,4 @@
-import { BufReader, BufWriter } from "../deps.ts";
+import { delay } from "../deps.ts";
 import { ClientConfig } from "./client.ts";
 import {
   ConnnectionError,
@@ -41,8 +41,6 @@ export class Connection {
   serverVersion: string = "";
 
   private conn?: Deno.Conn = undefined;
-  private reader?: BufReader = undefined;
-
   private _timedOut = false;
 
   get remoteAddr(): string {
@@ -67,7 +65,6 @@ export class Connection {
         transport: "unix",
         path: socketPath,
       } as any);
-    this.reader = new BufReader(this.conn, this.config.readBuffer);
 
     try {
       let receive = await this.nextPacket();
@@ -122,7 +119,7 @@ export class Connection {
       : null;
     let packet: ReceivePacket | null;
     try {
-      packet = await new ReceivePacket().parse(this.reader!);
+      packet = await new ReceivePacket().parse(this.conn!);
     } catch (error) {
       if (this._timedOut) {
         // Connection has been closed by timeoutCallback.

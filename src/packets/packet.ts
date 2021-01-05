@@ -17,14 +17,21 @@ export class SendPacket {
     this.header = { size: body.length, no };
   }
 
-  async send(conn: Deno.Writer) {
+  async send(conn: Deno.Conn) {
     const body = this.body as Uint8Array;
     const data = new BufferWriter(new Uint8Array(4 + body.length));
     data.writeUints(3, this.header.size);
     data.write(this.header.no);
     data.writeBuffer(body);
     log.debug(`send: ${data.length}B \n${byteFormat(data.buffer)}\n`);
-    await Deno.writeAll(conn, data.buffer.subarray(0, data.length));
+    try {
+      let wrote = 0;
+      do {
+        wrote += await conn.write(data.buffer.subarray(wrote));
+      } while (wrote < data.length);
+    } catch (error) {
+      throw new WriteError(error.message);
+    }
   }
 }
 
