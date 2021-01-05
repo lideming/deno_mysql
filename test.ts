@@ -280,7 +280,7 @@ testWithClient(async function testLargeQueryAndResponse(client) {
 
 testWithClient(async function testHeavyQueries(client) {
   const promises: Promise<void>[] = [];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 10; i++) {
     const str = buildLargeString(10240 + Math.floor(Math.random() * 256000));
     promises.push(
       client.query(`select "${str}" as str`).then(async (r) => {
