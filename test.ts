@@ -291,6 +291,29 @@ testWithClient(async function testHeavyQueries(client) {
   await Promise.all(promises);
 });
 
+testWithClient(async function testInsertManyRows(client) {
+  await client.transaction(async (conn) => {
+    await client.execute(`DROP TABLE IF EXISTS many_rows`);
+    await client.execute(`
+          CREATE TABLE many_rows (
+              id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+              data INT NOT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      `);
+    for (let i = 0; i < 1000; i++) {
+      await client.execute(
+        `INSERT INTO many_rows (data) values (?);`,
+        [i * 10],
+      );
+    }
+  });
+});
+
+testWithClient(async function testQueryManyRows(client) {
+  const result = await client.query(`SELECT * FROM many_rows;`);
+  assertEquals(result.length, 1000);
+});
+
 registerTests();
 
 await createTestDB();
